@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "ts-axios",
   "version": "0.0.0",
   "description": "",
@@ -10,6 +11,19 @@
     "dist"
   ],
   "author": "wangziqian <wzqwangziqian_v@didichuxing.com>",
+=======
+  "name": "--libraryname--",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "dist/--libraryname--.umd.js",
+  "module": "dist/--libraryname--.es5.js",
+  "typings": "dist/types/--libraryname--.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "--username-- <--usermail-->",
+>>>>>>> 8dc7ad56004bbe82798a951a7a2a817f40963ae9
   "repository": {
     "type": "git",
     "url": ""
@@ -32,6 +46,10 @@
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
+<<<<<<< HEAD
+=======
+    "postinstall": "ts-node tools/init",
+>>>>>>> 8dc7ad56004bbe82798a951a7a2a817f40963ae9
     "travis-deploy-once": "travis-deploy-once"
   },
   "lint-staged": {
