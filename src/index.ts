@@ -1,13 +1,14 @@
 import { buildURL } from './helper/url'
-import { transformRequest } from './helper/data'
+import { transformRequest, transformResponse } from './helper/data'
 import { processHeaders } from './helper/headers'
-import { AxiosRequestConfig } from './types/index'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types/index'
 import xhr from './xhr'
-import { config } from 'shelljs'
 // 初始化axios
-function axios(config: AxiosRequestConfig): void {
+function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config).then(res => {
+    return transformResponseData(res)
+  })
 }
 // 初始化参数
 function processConfig(config: AxiosRequestConfig): void {
@@ -28,5 +29,10 @@ function transformRequestData(config: AxiosRequestConfig): any {
 function transformHeaders(config: AxiosRequestConfig): any {
   const { headers = {}, data } = config
   return processHeaders(headers, data)
+}
+// 处理返回数据
+function transformResponseData(res: AxiosResponse): AxiosResponse {
+  res.data = transformResponse(res.data)
+  return res
 }
 export default axios

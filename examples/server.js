@@ -13,7 +13,12 @@ router.get('/base/get', function(req, res) {
   res.json(req.query)
 })
 router.post('/base/post', function(req, res) {
-  res.json(req.body)
+  res.json(
+    JSON.stringify({
+      a: 1,
+      b: 2
+    })
+  )
 })
 
 router.post('/base/buffer', function(req, res) {
@@ -28,6 +33,7 @@ router.post('/base/buffer', function(req, res) {
     res.json(buf.toJSON())
   })
 })
+app.use(router)
 
 app.use(
   webpackDevMiddleware(compiler, {
