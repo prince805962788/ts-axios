@@ -4,6 +4,7 @@ export interface AxiosRequestConfig {
   method?: Method
   data?: any
   params?: any
+  headers?: any
 }
 // 请求方法合法字符串
 export type Method =
