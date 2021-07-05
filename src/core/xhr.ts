@@ -1,6 +1,6 @@
-import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from './types'
-import { parseHeaders } from './helper/headers'
-import { createError } from './helper/error'
+import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from '../types'
+import { parseHeaders } from '../helper/headers'
+import { createError } from '../helper/error'
 
 // 发送http请求
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {

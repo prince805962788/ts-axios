@@ -13,7 +13,7 @@ const router = express.Router()
 router.get('/base/get', function(req, res) {
   res.json(req.query)
 })
-router.post('/base/post', function(req, res) {
+router.post('/extend/post', function(req, res) {
   res.json(
     JSON.stringify({
       a: 1,
