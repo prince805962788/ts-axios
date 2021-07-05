@@ -1,12 +1,29 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from './types'
 import { parseHeaders } from './helper/headers'
+import { createError } from './helper/error'
 
 // 发送http请求
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
-  return new Promise(resolve => {
-    const { data = null, url, method = 'get', headers, responseType } = config
+  return new Promise((resolve, reject) => {
+    const { data = null, url, method = 'get', headers, responseType, timeout } = config
 
     const request = new XMLHttpRequest()
+
+    // 错误处理
+    request.onerror = function handler() {
+      reject(createError('Network Error', config, null, request))
+    }
+
+    // 超时时间设置
+    if (timeout) {
+      request.timeout = timeout
+    }
+
+    request.ontimeout = function handleTimeout() {
+      reject(
+        createError(`Timeout of ${config.timeout} ms exceeded`, config, 'ECONNABORTED', request)
+      )
+    }
 
     // 返回类型
     if (responseType) {
@@ -14,6 +31,16 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     }
 
     request.open(method.toUpperCase(), url, true)
+
+    //设置响应头header
+    Object.keys(headers).forEach(name => {
+      // data为空，header中的content-type属性可以删除
+      if (data === null && name.toLowerCase() === 'content-type') {
+        delete headers[name]
+      } else {
+        request.setRequestHeader(name, headers[name]) //遍历设置header
+      }
+    })
 
     // 设置相应成功的回调
     request.onreadystatechange = function handleLoad() {
@@ -31,18 +58,25 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         config,
         request
       }
-      resolve(response)
+      handleResponse(response)
     }
 
-    //设置相应头header
-    Object.keys(headers).forEach(name => {
-      // data为空，header中的content-type属性可以删除
-      if (data === null && name.toLowerCase() === 'content-type') {
-        delete headers[name]
+    // 处理回调
+    function handleResponse(response: AxiosResponse) {
+      if (response.status >= 200 && response.status < 300) {
+        resolve(response)
       } else {
-        request.setRequestHeader(name, headers[name]) //遍历设置header
+        reject(
+          createError(
+            `Request failed with status code ${response.status}`,
+            config,
+            null,
+            request,
+            response
+          )
+        )
       }
-    })
+    }
 
     request.send(data)
   })

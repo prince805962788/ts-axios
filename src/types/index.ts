@@ -6,6 +6,7 @@ export interface AxiosRequestConfig {
   params?: any
   headers?: any
   responseType?: XMLHttpRequestResponseType
+  timeout?: number
 }
 // 请求方法合法字符串
 export type Method =
@@ -32,4 +33,13 @@ export interface AxiosResponse {
   config: AxiosRequestConfig
   request: any
 }
+// promise请求回调参数
 export interface AxiosPromise extends Promise<AxiosResponse> {}
+// 错误类型接口
+export interface AxiosError extends Error {
+  config: AxiosRequestConfig
+  code?: string
+  request?: any
+  response?: AxiosResponse
+  isAxiosError: boolean
+}
