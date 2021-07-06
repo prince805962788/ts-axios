@@ -1,12 +1,13 @@
 // 请求入参config类型
 export interface AxiosRequestConfig {
-  url: string
+  url?: string
   method?: Method
   data?: any
   params?: any
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+  [propName: string]: any
 }
 // 请求方法合法字符串
 export type Method =
@@ -45,6 +46,7 @@ export interface AxiosError extends Error {
 }
 // 混合对象接口定义
 export interface Axios {
+  defaults: AxiosRequestConfig
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>

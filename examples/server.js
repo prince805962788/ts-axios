@@ -13,7 +13,7 @@ const router = express.Router()
 router.get('/extend/user', function(req, res) {
   res.json(req.query)
 })
-router.post('/extend/post', function(req, res) {
+router.post('/config/post', function(req, res) {
   res.json(
     JSON.stringify({
       a: 1,

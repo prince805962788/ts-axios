@@ -1,6 +1,6 @@
 import { buildURL } from '../helper/url'
 import { transformRequest, transformResponse } from '../helper/data'
-import { processHeaders } from '../helper/headers'
+import { processHeaders, flattenHeaders } from '../helper/headers'
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types/index'
 import xhr from './xhr'
 // 初始化axios
@@ -15,11 +15,12 @@ function processConfig(config: AxiosRequestConfig): void {
   config.url = transformUrl(config)
   config.headers = transformHeaders(config)
   config.data = transformRequestData(config)
+  config.headers = flattenHeaders(config.headers, config.method!)
 }
 // 转换url参数格式
 function transformUrl(config: AxiosRequestConfig): string {
   const { url, params } = config
-  return buildURL(url, params)
+  return buildURL(url!, params)
 }
 // 转换body的数据格式
 function transformRequestData(config: AxiosRequestConfig): any {
