@@ -10,7 +10,7 @@ const compiler = webpack(WebpackConfig)
 
 const router = express.Router()
 // get请求
-router.get('/base/get', function(req, res) {
+router.get('/extend/user', function(req, res) {
   res.json(req.query)
 })
 router.post('/extend/post', function(req, res) {
@@ -46,7 +46,7 @@ router.get('/error/get', function(req, res) {
   }
 })
 
-router.get('/error/timeout', function(req, res) {
+router.get('/interceptor/get', function(req, res) {
   setTimeout(() => {
     res.json({
       msg: `hello world`

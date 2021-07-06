@@ -8,6 +8,8 @@ function createInstance(): AxiosInstance {
 
   extend(instance, context)
 
+  console.log(context)
+
   return instance as AxiosInstance
 }
 

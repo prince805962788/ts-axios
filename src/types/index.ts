@@ -1,24 +1,3 @@
-// 混合对象接口定义
-export interface Axios {
-  request(config: AxiosRequestConfig): AxiosPromise
-
-  get(url: string, config?: AxiosRequestConfig): AxiosPromise
-
-  delete(url: string, config?: AxiosRequestConfig): AxiosPromise
-
-  head(url: string, config?: AxiosRequestConfig): AxiosPromise
-
-  options(url: string, config?: AxiosRequestConfig): AxiosPromise
-
-  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
-
-  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
-
-  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
-}
-export interface AxiosInstance extends Axios {
-  (config: AxiosRequestConfig): AxiosPromise
-}
 // 请求入参config类型
 export interface AxiosRequestConfig {
   url: string
@@ -46,8 +25,8 @@ export type Method =
   | 'patch'
   | 'PATCH'
 // 请求回调参数
-export interface AxiosResponse {
-  data: any
+export interface AxiosResponse<T = any> {
+  data: T
   status: number
   statusText: string
   headers: any
@@ -55,7 +34,7 @@ export interface AxiosResponse {
   request: any
 }
 // promise请求回调参数
-export interface AxiosPromise extends Promise<AxiosResponse> {}
+export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 // 错误类型接口
 export interface AxiosError extends Error {
   config: AxiosRequestConfig
@@ -63,4 +42,45 @@ export interface AxiosError extends Error {
   request?: any
   response?: AxiosResponse
   isAxiosError: boolean
+}
+// 混合对象接口定义
+export interface Axios {
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
+
+  request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
+
+  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  head<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  options<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+// 混合promise定义
+export interface AxiosInstance extends Axios {
+  <T = any>(config: AxiosRequestConfig): AxiosPromise<T>
+
+  <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+// 拦截器接口定义
+export interface AxiosInterceptorManager<T> {
+  use(resolved: ResolvedFn<T>, reject?: RejectedFn): number
+
+  eject(id: number): void
+}
+export interface ResolvedFn<T = any> {
+  (val: T): T | Promise<T>
+}
+export interface RejectedFn {
+  (error: any): any
 }
